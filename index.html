@@ -56,20 +56,20 @@
           <li class="list-group-item list-group-item-danger">
             <h3>ERRORS</h3>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" onclick="notAFunctionError()">
             <h3>TypeError</h3>
             <p>obj.attributeInvalid is not a function</p>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" onclick="uriError()">
             <h3>URIError</h3>
             <p>URI malformed
             </p>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" onclick="syntaxError()">
             <h3>SyntaxError</h3>
             <p>Unexpected identifier</p>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" onclick="rangeError()">
             <h3>RangeError</h3>
             <p>Parameter must be between 1 and 100</p>
           </li>
@@ -78,17 +78,36 @@
     </div>
 
     <script>
-      $(document).ready(function(){
-        console.log("document\n")
-        // $("button").click(function(){
-        $("#submit-email").click(function(event){
-          console.log("HELLLO WORLD...", event)
-          var email = $("#email")
-          console.log('email IS', email.val())
+      notAFunctionError = function() {
+        var someArray = [{ func: function () {}}];
+        someArray[1].func();
+      }
 
-          document.querySelector('#guest-email').innerHTML = email.val();
+      uriError = function() {
+        decodeURIComponent('%');
+      }
+
+      syntaxError = function() {
+        eval('foo bar');
+      }
+
+      rangeError = function() {
+        throw new RangeError('Parameter must be between 1 and 100');
+      }
+
+      $(document).ready(function(){
+        $("#submit-email").click(function(event){
+          // console.log("HELLLO WORLD...", event) // event.data event.val, event.target.value
+
+          var email = $("#email").val()
+          document.querySelector('#guest-email').innerHTML = email
+
+          Sentry.configureScope(scope => {
+            scope.setUser({ email: email });
+          });
         });
       });
+
     </script>
   </body>
 </html>
