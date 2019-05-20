@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+      <!-- <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script> -->
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    
+    <script>window.$ = window.jQuery = require('jquery');</script>
+
+    
+    <meta charset="UTF-8">  
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'"> -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'""> -->
 
+    <!-- <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script> -->
+
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
+
     <title>Hello Sentry!</title>
   </head>
   <body>
@@ -17,9 +32,15 @@
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
 
+
+
     <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
     <script>
-      console.log('SENTRY.INIT')
+      console.log('SENTRY.INIT document', document)
+
+      // console.log($(document))
+      console.log('SENTRY.INIT $', $)
+
       Sentry.init({ dsn: 'https://5268e7ce262e40e583ed8bfcaac59b90@sentry.io/1463801' })
     </script>
 
@@ -41,11 +62,11 @@
             <div class="form-group">
               <input type="text" type="email" class="form-control" placeholder="Enter email">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button id="submit-email" type="submit" class="btn btn-primary">Submit</button>
+            <!-- <button id="submit-email" type="submit" class="btn btn-primary">Submit</button> -->
           </form>
         </div>
 
-        <h2>Hi Person</h2>
 
         <ul class="center list-group">
           <li class="list-group-item list-group-item-danger">

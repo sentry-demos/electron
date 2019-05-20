@@ -53,4 +53,9 @@ app.on('activate', function () {
   //     }
   //   })
   // })
+  console.log("$", $)
+  $("submit-email").on("click", function( event ) {
+    // hiddenBox.show();
+    console.log('button clicked...', event)
+  });
 })
