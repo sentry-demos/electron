@@ -1,24 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <!-- <script
-      type="text/javascript"
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"></script> -->
-    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-    
     <script>window.$ = window.jQuery = require('jquery');</script>
 
     
     <meta charset="UTF-8">  
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'"> -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'""> -->
-
-    <!-- <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"></script> -->
 
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -32,15 +20,8 @@
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
 
-
-
     <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
     <script>
-      console.log('SENTRY.INIT document', document)
-
-      // console.log($(document))
-      console.log('SENTRY.INIT $', $)
-
       Sentry.init({ dsn: 'https://5268e7ce262e40e583ed8bfcaac59b90@sentry.io/1463801' })
     </script>
 
@@ -60,12 +41,15 @@
         <div class="center">
           <form>
             <div class="form-group">
-              <input type="text" type="email" class="form-control" placeholder="Enter email">
+              <input id="email" type="text" type="email" class="form-control" placeholder="Enter email">
             </div>
-            <button id="submit-email" type="submit" class="btn btn-primary">Submit</button>
-            <!-- <button id="submit-email" type="submit" class="btn btn-primary">Submit</button> -->
+            <!-- cause page re-load if you don't use onclick return false -->
+            <button id="submit-email" type="submit" class="btn btn-primary" onclick="return false">Submit</button>
           </form>
+          <!-- <button id="submit-email" type="submit" class="btn btn-primary">Submit</button> -->
         </div>
+
+        <h2 id="guest-email">Hi Guest</h2>
 
 
         <ul class="center list-group">
@@ -93,6 +77,18 @@
       </div>
     </div>
 
+    <script>
+      $(document).ready(function(){
+        console.log("document\n")
+        // $("button").click(function(){
+        $("#submit-email").click(function(event){
+          console.log("HELLLO WORLD...", event)
+          var email = $("#email")
+          console.log('email IS', email.val())
 
+          document.querySelector('#guest-email').innerHTML = email.val();
+        });
+      });
+    </script>
   </body>
 </html>

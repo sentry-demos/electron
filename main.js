@@ -44,7 +44,7 @@ app.on('activate', function () {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow()
 
-
+  // Attempt to suppress yellow warning when Electron app loads, "Electron Security Warning (Insecure Content-Security-Policy) This renderer process has either no Content Security Policy set or a policy with "unsafe-eval" enabled"
   // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
   //   callback({
   //     responseHeaders: {
@@ -53,9 +53,4 @@ app.on('activate', function () {
   //     }
   //   })
   // })
-  console.log("$", $)
-  $("submit-email").on("click", function( event ) {
-    // hiddenBox.show();
-    console.log('button clicked...', event)
-  });
 })
