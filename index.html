@@ -2,18 +2,76 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'"> -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'""> -->
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    
     <title>Hello Sentry!</title>
   </head>
   <body>
-    <h1>Hello Sentry!</h1>
     <!-- All of the Node.js APIs are available in this renderer process. -->
+    <!-- <h1>Hello Sentry!</h1>
     We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    and Electron <script>document.write(process.versions.electron)</script>. -->
+
+    <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+      console.log('SENTRY.INIT')
+      Sentry.init({ dsn: 'https://5268e7ce262e40e583ed8bfcaac59b90@sentry.io/1463801' })
+    </script>
 
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
     </script>
+
+    <div class="">
+      <div class="App" style="color: black">
+        <div class="App-header">
+          <img src="assets/sentry-glyph-black.png" class="App-logo" alt="logo" />
+          <h1>Sentry.io - Sample Error Page</h1>
+        </div>
+
+        <!-- START  -->
+        <div class="center">
+          <form>
+            <div class="form-group">
+              <input type="text" type="email" class="form-control" placeholder="Enter email">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+
+        <h2>Hi Person</h2>
+
+        <ul class="center list-group">
+          <li class="list-group-item list-group-item-danger">
+            <h3>ERRORS</h3>
+          </li>
+          <li class="list-group-item">
+            <h3>TypeError</h3>
+            <p>obj.attributeInvalid is not a function</p>
+          </li>
+          <li class="list-group-item">
+            <h3>URIError</h3>
+            <p>URI malformed
+            </p>
+          </li>
+          <li class="list-group-item">
+            <h3>SyntaxError</h3>
+            <p>Unexpected identifier</p>
+          </li>
+          <li class="list-group-item">
+            <h3>RangeError</h3>
+            <p>Parameter must be between 1 and 100</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
   </body>
 </html>
