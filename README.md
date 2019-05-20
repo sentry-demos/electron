@@ -1,6 +1,15 @@
 # electron-quick-start
 
+### Setup
+1. npm install
+2. Place your DSN Key in `index.html`
+``` javascript
+    <script>
+      Sentry.init({ dsn: '<dsn_key>' })
+    </script>
+```
 
+### Run
 1. npm start
 
 

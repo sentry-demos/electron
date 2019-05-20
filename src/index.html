@@ -2,54 +2,37 @@
 <html>
   <head>
     <script>window.$ = window.jQuery = require('jquery');</script>
-
-    
-    <meta charset="UTF-8">  
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'"> -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'""> -->
-
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
+    <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">  
     <title>Hello Sentry!</title>
   </head>
   <body>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    <!-- <h1>Hello Sentry!</h1>
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>. -->
 
-    <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
     <script>
       Sentry.init({ dsn: 'https://5268e7ce262e40e583ed8bfcaac59b90@sentry.io/1463801' })
-    </script>
-
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
     </script>
 
     <div class="">
       <div class="App" style="color: black">
         <div class="App-header">
-          <img src="assets/sentry-glyph-black.png" class="App-logo" alt="logo" />
+          <img src="../assets/sentry-glyph-black.png" class="App-logo" alt="logo" />
           <h1>Sentry.io - Sample Error Page</h1>
         </div>
 
-        <!-- START  -->
         <div class="center">
           <form>
             <div class="form-group">
               <input id="email" type="text" type="email" class="form-control" placeholder="Enter email">
             </div>
-            <!-- cause page re-load if you don't use onclick return false -->
             <button id="submit-email" type="submit" class="btn btn-primary" onclick="return false">Submit</button>
           </form>
-          <!-- <button id="submit-email" type="submit" class="btn btn-primary">Submit</button> -->
         </div>
 
-        <h2 id="guest-email">Hi Guest</h2>
+        <h2 id="guest-email">Set Your Email Above</h2>
 
 
         <ul class="center list-group">
@@ -97,10 +80,8 @@
 
       $(document).ready(function(){
         $("#submit-email").click(function(event){
-          // console.log("HELLLO WORLD...", event) // event.data event.val, event.target.value
-
           var email = $("#email").val()
-          document.querySelector('#guest-email').innerHTML = email
+          document.querySelector('#guest-email').innerHTML = `Hi ${email}`
 
           Sentry.configureScope(scope => {
             scope.setUser({ email: email });
