@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, session} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -44,3 +45,16 @@ app.on('activate', function () {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow()
 })
+
+
+// The IPC handlers below trigger errors in the here (main process) when
+// the user clicks on corresponding buttons in the UI (renderer).
+ipcMain.on('demo.error', () => {
+  console.log('Error triggered in main processes');
+  throw new Error('Error triggered in main processes');
+});
+
+ipcMain.on('demo.crash', () => {
+  console.log('process.crash()');
+  process.crash();
+});

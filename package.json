@@ -20,6 +20,7 @@
     "electron": "^4.1.4"
   },
   "dependencies": {
+    "@sentry/electron": "^0.17.1",
     "jquery": "^3.4.1"
   }
 }
