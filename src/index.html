@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <script>window.$ = window.jQuery = require('jquery');</script>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
+    <!-- Sentry & App -->
     <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
+    <script src="index.js" type="text/javascript"></script>
 
-    <meta charset="UTF-8">  
     <title>Hello Sentry!</title>
   </head>
   <body>
-
-    <script>
-      // electron App...
-      Sentry.init({ dsn: 'https://5268e7ce262e40e583ed8bfcaac59b90@sentry.io/1463801' })
-    </script>
-
     <div class="">
       <div class="App" style="color: black">
         <div class="App-header">
@@ -35,50 +31,34 @@
 
         <h2 id="guest-email">Set Your Email Above</h2>
 
-
         <ul class="center list-group">
           <li class="list-group-item list-group-item-danger">
-            <h3>ERRORS</h3>
+            <h3>NATIVE CRASH</h3>
+          </li>
+          <li class="list-group-item" onclick="crashMain()">
+            <h3>Main Process - process.crash()</h3>
+            <p>ipc crash main</p>
+          </li>
+          <li class="list-group-item" onclick="crashRenderer()">
+            <h3>Crash Render</h3>
+            <p>error from render process</p>
+          </li>
+          <li class="list-group-item list-group-item-danger">
+              <h3>JAVASCRIPT</h3>
           </li>
           <li class="list-group-item" onclick="notAFunctionError()">
-            <h3>TypeError</h3>
+            <h3>Main Process - TypeError</h3>
             <p>obj.attributeInvalid is not a function</p>
           </li>
-          <li class="list-group-item" onclick="uriError()">
-            <h3>URIError</h3>
-            <p>URI malformed
-            </p>
-          </li>
           <li class="list-group-item" onclick="syntaxError()">
-            <h3>SyntaxError</h3>
+            <h3>Renderer Process - SyntaxError</h3>
             <p>Unexpected identifier</p>
-          </li>
-          <li class="list-group-item" onclick="rangeError()">
-            <h3>RangeError</h3>
-            <p>Parameter must be between 1 and 100</p>
           </li>
         </ul>
       </div>
     </div>
 
     <script>
-      notAFunctionError = function() {
-        var someArray = [{ func: function () {}}];
-        someArray[1].func();
-      }
-
-      uriError = function() {
-        decodeURIComponent('%');
-      }
-
-      syntaxError = function() {
-        eval('foo bar');
-      }
-
-      rangeError = function() {
-        throw new RangeError('Parameter must be between 1 and 100');
-      }
-
       $(document).ready(function(){
         $("#submit-email").click(function(event){
           var email = $("#email").val()
@@ -90,20 +70,18 @@
         });
       });
 
-      function errorMain() {
-        ipcRenderer.send('demo.error');
-      };
-
-      function errorRenderer() {
-        throw new Error('Error triggered in renderer process');
-      };
-
-      function crashMain() {
-        ipcRenderer.send('demo.crash');
-      };
-
-      // function crashRenderercrash = crash
-
     </script>
   </body>
 </html>
+
+
+<!-- <li class="list-group-item" onclick="uriError()">
+  <h3>URIError</h3>
+  <p>URI malformed
+  </p>
+</li>
+
+<li class="list-group-item" onclick="rangeError()">
+  <h3>RangeError</h3>
+  <p>Parameter must be between 1 and 100</p>
+</li> -->

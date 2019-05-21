@@ -1,6 +1,7 @@
 # electron-quick-start
 
 ### Setup
+TODO - update these steps....
 1. npm install
 2. Place your DSN Key in `index.html`
 ``` javascript
@@ -11,6 +12,17 @@
 
 ### Run
 1. npm start
+
+
+
+
+
+
+
+
+
+
+
 
 
 **Clone and run for a quick way to see Electron in action.**
