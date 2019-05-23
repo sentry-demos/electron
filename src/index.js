@@ -1,10 +1,8 @@
-// TODO - can access the Sentry object?
+//index.js
 require('../sentry');
 
 const { ipcRenderer } = require('electron');
 const { crash } = global.process || {};
-
-console.log('Sentry', Sentry)
 
 function notAFunctionError() {
     var someArray = [{ func: function () {}}];
@@ -16,36 +14,26 @@ function syntaxError() {
 }
 
 
-// JAVASRIPT
-function errorMain() {
-    ipcRenderer.send('demo.error');
-};
-function errorRenderer() {
-    throw new Error('Error triggered in renderer process');
-};
-
 // CRASH
 function crashMain() {
     ipcRenderer.send('demo.crash');
 };
 
+// JAVASCRIPT
+function errorMain() {
+    ipcRenderer.send('demo.error');
+};
+function errorRenderer() {
+    throw new Error('Error in renderer process');
+};
+
 crashRenderer = crash
 
 
-
 // WOULD BE NICE...
-// versions = {
-//     chrome: process.versions.chrome,
-//     electron: process.versions.electron,
-//     node: process.versions.node,
-// };
-  
-
-
-// function rangeError() {
-//     throw new RangeError('Parameter must be between 1 and 100');
-// }
-
-// function uriError() {
-//     decodeURIComponent('%');
-//   }
+const versions = {
+    chrome: process.versions.chrome,
+    electron: process.versions.electron,
+    node: process.versions.node,
+};
+console.log('VERSIONS', versions)

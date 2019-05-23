@@ -36,26 +36,37 @@
             <h3>NATIVE CRASH</h3>
           </li>
           <li class="list-group-item" onclick="crashMain()">
-            <h3>Main Process - process.crash()</h3>
-            <p>ipc crash main</p>
+            <h3>Main Process</h3>
+            <p>process.crash() in the main process</p>
           </li>
           <li class="list-group-item" onclick="crashRenderer()">
-            <h3>Crash Render</h3>
-            <p>error from render process</p>
+            <h3>Renderer Process</h3>
+            <p>crash from exception thrown within renderer process</p>
           </li>
           <li class="list-group-item list-group-item-danger">
               <h3>JAVASCRIPT</h3>
           </li>
           <li class="list-group-item" onclick="notAFunctionError()">
-            <h3>Main Process - TypeError</h3>
-            <p>obj.attributeInvalid is not a function</p>
+            <h3>TypeError</h3>
+            <p>"obj.attributeInvalid is not a function"</p>
           </li>
           <li class="list-group-item" onclick="syntaxError()">
-            <h3>Renderer Process - SyntaxError</h3>
-            <p>Unexpected identifier</p>
+            <h3>SyntaxError</h3>
+            <p>"Unexpected identifier"</p>
           </li>
         </ul>
+        <footer class="footer">
+          Node.js
+          <script>document.write(versions.node)</script>
+          <br> Chromium
+          <script>document.write(versions.chrome)</script>
+          <br> Electron
+          <script>document.write(versions.electron)</script>
+          <br>
+        </footer>
       </div>
+
+
     </div>
 
     <script>
@@ -69,19 +80,7 @@
           });
         });
       });
-
     </script>
+
   </body>
 </html>
-
-
-<!-- <li class="list-group-item" onclick="uriError()">
-  <h3>URIError</h3>
-  <p>URI malformed
-  </p>
-</li>
-
-<li class="list-group-item" onclick="rangeError()">
-  <h3>RangeError</h3>
-  <p>Parameter must be between 1 and 100</p>
-</li> -->
