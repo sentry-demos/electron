@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Sentry & App -->
+    <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
+    <script src="index.js" type="text/javascript"></script>
+
+    <title>Hello Sentry!</title>
+  </head>
+  <body>
+    <div class="">
+      <div class="App" style="color: black">
+        <div class="App-header">
+          <img src="../assets/sentry-glyph-black.png" class="App-logo" alt="logo" />
+          <h1>Sentry.io - Sample Error Page</h1>
+        </div>
+
+        <div class="center">
+          <form>
+            <div class="form-group">
+              <input id="email" type="text" type="email" class="form-control" placeholder="Enter email">
+            </div>
+            <button id="submit-email" type="submit" class="btn btn-primary" onclick="return false">Submit</button>
+          </form>
+        </div>
+
+        <h2 id="guest-email">Set Your Email Above</h2>
+
+        <ul class="center list-group">
+          <li class="list-group-item list-group-item-danger">
+            <h3>NATIVE CRASH</h3>
+          </li>
+          <li class="list-group-item" onclick="crashMain()">
+            <h3>Main Process</h3>
+            <p>process.crash() in the main process</p>
+          </li>
+          <li class="list-group-item" onclick="crashRenderer()">
+            <h3>Renderer Process</h3>
+            <p>crash from exception thrown within renderer process</p>
+          </li>
+          <li class="list-group-item list-group-item-danger">
+              <h3>JAVASCRIPT</h3>
+          </li>
+          <li class="list-group-item" onclick="notAFunctionError()">
+            <h3>TypeError</h3>
+            <p>"obj.attributeInvalid is not a function"</p>
+          </li>
+          <li class="list-group-item" onclick="syntaxError()">
+            <h3>SyntaxError</h3>
+            <p>"Unexpected identifier"</p>
+          </li>
+        </ul>
+        <footer class="footer">
+          Node.js
+          <script>document.write(versions.node)</script>
+          <br> Chromium
+          <script>document.write(versions.chrome)</script>
+          <br> Electron
+          <script>document.write(versions.electron)</script>
+          <br>
+        </footer>
+      </div>
+
+
+    </div>
+
+    <script>
+      $(document).ready(function(){
+        $("#submit-email").click(function(event){
+          var email = $("#email").val()
+          document.querySelector('#guest-email').innerHTML = `Hi ${email}`
+
+          Sentry.configureScope(scope => {
+            scope.setUser({ email: email });
+          });
+        });
+      });
+    </script>
+
+  </body>
+</html>
