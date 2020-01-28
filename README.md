@@ -43,3 +43,5 @@ https://github.com/electron/electron/releases
 This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
 You can learn more about each of these components within the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start).
 
+## GIF Electron Javascript
+![gif](electron-javascript.gif)
