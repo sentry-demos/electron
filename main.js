@@ -9,9 +9,17 @@ require('./sentry');
 let date = Date.now();
 
 // replace with your sentry_key ref: https://develop.sentry.dev/sdk/store/
-const SENTRY_KEY='SENTRY_KEY';
+const SENTRY_KEY='aab0a4e2af5a4df0a9adf094e657809e@o87286' // for testorg-az 'electron' project
+const PROJECT_ID='1318230' // for testorg-az 'electron' project
+const SENTRY_AUTH_TOKEN="" //Put your auth token here
 const dir = app.getAppPath();
 const pathToDir = path.join(__dirname, "offlineEvents")
+
+if (!SENTRY_KEY) {
+  throw("You must set your SENTRY_KEY in main.js")
+} else if (!SENTRY_AUTH_TOKEN) {
+  throw("You must set your SENTRY_AUTH_TOKEN in main.js")
+}
 
 const removeDir = function(path) {
   if (fs.existsSync(path)) {
@@ -98,17 +106,17 @@ ipcMain.on('online-status-changed', (event, status) => {
         //handling error
         if (err) {
           return console.log('Unable to scan directory: ' + err);
-        } 
+        }
         //listing all files using forEach
         files.forEach(function (file) {
           fs.readFile("./offlineEvents/" + file, "utf8", function (err, data) {
             if (err) throw err;
             // replace with your project store endpoint https://develop.sentry.dev/sdk/store/ and Auth Token
-            axios.post('https://SENTRY_KEY.ingest.sentry.io/api/PROJECT_ID/store/', data, {
+            axios.post(`https://${SENTRY_KEY}.ingest.sentry.io/api/${PROJECT_ID}/store/`, data, {
               headers: {
                 'Content-Type': 'application/json',
                 'X-Sentry-Auth': `Sentry sentry_version=7,sentry_timestamp=${date},sentry_client=sentry-curl/1.0,sentry_key=${SENTRY_KEY}`,
-                'Authorization': 'Bearer AUTH_TOKEN'
+                'Authorization': `Bearer ${SENTRY_AUTH_TOKEN}`
               },
             })
             .then(response => {
