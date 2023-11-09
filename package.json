@@ -19,7 +19,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "@sentry/webpack-plugin": "^1.18.8",
-    "electron": "^4.1.4",
+    "electron": "^22.3.25",
     "electron-download": "^4.1.1",
     "eslint": "^8.11.0",
     "webpack": "^4.44.1",
