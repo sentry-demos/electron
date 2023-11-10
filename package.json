@@ -29,7 +29,7 @@
     "@sentry/cli": "^1.73.2",
     "@sentry/electron": "^3.0.4",
     "@sentry/tracing": "^6.18.2",
-    "axios": "^0.19.2",
+    "axios": "^1.6.0",
     "jquery": "^3.4.1"
   }
 }
