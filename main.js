@@ -1,32 +1,47 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs');
 const path = require('path')
 const axios = require('axios')
+const Sentry = require('@sentry/electron/main');
+const { replayIntegration } = require('@sentry/electron/renderer');
 
-require('./sentry');
-
-let date = Date.now();
-
-// replace with your sentry_key ref: https://develop.sentry.dev/sdk/store/
-const SENTRY_KEY='aab0a4e2af5a4df0a9adf094e657809e@o87286' // for testorg-az 'electron' project
-const PROJECT_ID='1318230' // for testorg-az 'electron' project
-const SENTRY_AUTH_TOKEN="" //Put your auth token here
 const dir = app.getAppPath();
-const pathToDir = path.join(__dirname, "offlineEvents")
 
-if (!SENTRY_KEY) {
-  throw("You must set your SENTRY_KEY in main.js")
-} else if (!SENTRY_AUTH_TOKEN) {
-  throw("You must set your SENTRY_AUTH_TOKEN in main.js")
-}
+Sentry.init({
+  // TODO: Replace with your project's DSN
+  dsn: '***',
+  integrations: [
+    replayIntegration(),
+  ],
+  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+  replaysOnErrorSampleRate: 1.0,
+  beforeSend(event) {
+    console.log(event.tags.onlineStatus)
+    if (event.tags.onlineStatus === 'online') {
+      return event
+    } else if (event.tags.onlineStatus === 'offline') {
+      let sentryEvent = event
+      console.log(sentryEvent.event_id)
 
-const removeDir = function(path) {
+      // write to a new file
+      fs.writeFileSync('./offlineEvents/' + sentryEvent.event_id + '.json', JSON.stringify(sentryEvent), (err) => {
+        // throws an error, you could also catch it here
+        if (err) throw err;
+        // success case, the file was saved
+        console.log('Event saved!');
+      });
+    }
+    return event
+  }
+});
+
+const removeDir = function (path) {
   if (fs.existsSync(path)) {
     const files = fs.readdirSync(path)
 
     if (files.length > 0) {
-      files.forEach(function(filename) {
+      files.forEach(function (filename) {
         if (fs.statSync(path + '/' + filename).isDirectory()) {
           removeDir(path + '/' + filename)
         } else {
@@ -47,12 +62,13 @@ const removeDir = function(path) {
 // let mainWindow
 let onlineStatusWindow;
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   onlineStatusWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
+      contextIsolation: false,
       nodeIntegration: true
     }
   })
@@ -92,44 +108,14 @@ app.on('activate', function () {
 ipcMain.on('online-status-changed', (event, status) => {
   if (status === 'offline') {
     console.log('OFFLINE')
+    event.setTag
     fs.mkdirSync((`${dir}`, 'offlineEvents'), (err, directory) => {
       if (err) throw err;
       // A new temporary directory is created within the app root
     });
-    Sentry.configureScope(function(scope) {
-      scope.setTag('onlineStatus', 'offline')
+    Sentry.configureScope(scope => {
+      scope.setTag("onlineStatus", 'offline');
     });
-  }
-  if (status === 'online') {
-    if (fs.existsSync("./offlineEvents/")) {
-      fs.readdir("./offlineEvents/", function (err, files) {
-        //handling error
-        if (err) {
-          return console.log('Unable to scan directory: ' + err);
-        }
-        //listing all files using forEach
-        files.forEach(function (file) {
-          fs.readFile("./offlineEvents/" + file, "utf8", function (err, data) {
-            if (err) throw err;
-            // replace with your project store endpoint https://develop.sentry.dev/sdk/store/ and Auth Token
-            axios.post(`https://${SENTRY_KEY}.ingest.sentry.io/api/${PROJECT_ID}/store/`, data, {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Sentry-Auth': `Sentry sentry_version=7,sentry_timestamp=${date},sentry_client=sentry-curl/1.0,sentry_key=${SENTRY_KEY}`,
-                'Authorization': `Bearer ${SENTRY_AUTH_TOKEN}`
-              },
-            })
-            .then(response => {
-              if (response.status === 200) {
-                removeDir(pathToDir)
-              }
-            })
-          });
-        });
-      });
-    } else {
-      console.log("Directory does not exist. No offline events to send")
-    }
   }
 })
 

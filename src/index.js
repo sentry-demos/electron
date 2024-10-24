@@ -1,35 +1,39 @@
 //index.js
-require('../sentry');
-
-const { ipcRenderer } = require('electron');
+const electron = require('electron');
+const Sentry_renderer = Sentry = require('@sentry/electron/renderer');
+const Sentry_browser = Sentry = require('@sentry/browser');
 const { crash } = global.process || {};
 
+Sentry_renderer.init({
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+
+    // Capture Replay for 10% of all sessions,
+    // plus for 100% of sessions with an error
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+});
 
 function notAFunctionError() {
-    if (window.navigator.onLine === true) {
-        Sentry.configureScope(function(scope) { 
-            scope.setTag('onlineStatus', 'online'); 
-        });
-    } else if (window.navigator.onLine === false) {
-        Sentry.configureScope(function(scope) {
-            scope.setTag('onlineStatus', 'offline')
-        });
-    }
-    var someArray = [{ func: function () {}}];
+    setStatusTag();
+    var someArray = [{ func: function () { } }];
     someArray[1].func();
 }
 
 function syntaxError() {
-    if (window.navigator.onLine === true) {
-        Sentry.configureScope(function(scope) { 
-            scope.setTag('onlineStatus', 'online'); 
-        });
-    } else if (window.navigator.onLine === false) {
-        Sentry.configureScope(function(scope) {
-            scope.setTag('onlineStatus', 'offline')
-        });
-    }
+    setStatusTag();
     eval('foo bar');
+}
+
+function setStatusTag(){
+    const scope = Sentry_browser.getCurrentScope();
+    if (window.navigator.onLine === true) {
+        scope.setTag("onlineStatus", 'online');
+    } else if (window.navigator.onLine === false) {
+        scope.setTag("onlineStatus", 'offline');
+    }
 }
 
 
