@@ -4,17 +4,24 @@ const fs = require('fs');
 const path = require('path')
 const axios = require('axios')
 const Sentry = require('@sentry/electron/main');
-const { replayIntegration } = require('@sentry/electron/renderer');
+const { replayIntegration, browserTracingIntegration } = require('@sentry/electron/renderer');
 
 const dir = app.getAppPath();
 
 Sentry.init({
   // TODO: Replace with your project's DSN
   dsn: '***',
+  
   integrations: [
-    replayIntegration(),
+    browserTracingIntegration(),
+    replayIntegration({
+      // Additional SDK configuration goes in here, for example:
+      maskAllText: true,
+      blockAllMedia: true,
+    })
+    
   ],
-  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+  replaysSessionSampleRate: 1.0, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
   replaysOnErrorSampleRate: 1.0,
   beforeSend(event) {
     console.log(event.tags.onlineStatus)

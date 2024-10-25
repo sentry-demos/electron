@@ -2,9 +2,9 @@
 
 ## Setup
 1. `npm install`
-2. Place your DSN Key in `sentry.js`
+2. Place your DSN Key in `main.js`
 ```javascript
-init({
+Sentry.init({
   // TODO: Replace with your project's DSN
   dsn: 'SENTRY_DSN',
 });
@@ -26,13 +26,6 @@ node sentry-symbols.js
 ```
 4. Check that your Debug Info Files were uploaded  
 Sentry.io > Project Settings > Debug Files
-5. (For Electron JavaScript Offline Events) - in `main.js` you'll need up update:
-
-```
-SENTRY_KEY
-PROJECT_ID
-AUTH_TOKEN
-```
 
 ## Run
 1. `npm start`

@@ -1,5 +1,6 @@
 //index.js
 const electron = require('electron');
+const { ValidationError } = require('webpack');
 const Sentry_renderer = Sentry = require('@sentry/electron/renderer');
 const Sentry_browser = Sentry = require('@sentry/browser');
 const { crash } = global.process || {};
@@ -25,6 +26,11 @@ function notAFunctionError() {
 function syntaxError() {
     setStatusTag();
     eval('foo bar');
+}
+
+function inputError() {
+    const scope = Sentry_browser.getCurrentScope();
+    throw "Submit failed";
 }
 
 function setStatusTag(){
