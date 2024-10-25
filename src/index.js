@@ -1,11 +1,17 @@
 //index.js
 const electron = require('electron');
-const { ValidationError } = require('webpack');
 const Sentry_renderer = Sentry = require('@sentry/electron/renderer');
-const Sentry_browser = Sentry = require('@sentry/browser');
 const { crash } = global.process || {};
 
 Sentry_renderer.init({
+    integrations: [
+        Sentry_renderer.browserTracingIntegration(),
+        Sentry_renderer.replayIntegration({
+            // Additional SDK configuration goes in here, for example:
+            maskAllText: true,
+            blockAllMedia: true,
+        })
+    ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
@@ -29,12 +35,12 @@ function syntaxError() {
 }
 
 function inputError() {
-    const scope = Sentry_browser.getCurrentScope();
+    const scope = Sentry_renderer.getCurrentScope();
     throw "Submit failed";
 }
 
-function setStatusTag(){
-    const scope = Sentry_browser.getCurrentScope();
+function setStatusTag() {
+    const scope = Sentry_renderer.getCurrentScope();
     if (window.navigator.onLine === true) {
         scope.setTag("onlineStatus", 'online');
     } else if (window.navigator.onLine === false) {
