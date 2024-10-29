@@ -7,8 +7,8 @@ const dir = app.getAppPath();
 
 Sentry.init({
   // TODO: Replace with your project's DSN
-  dsn: '***',
-  
+  dsn: '****',
+
   beforeSend(event) {
     console.log(event.tags.onlineStatus)
     if (event.tags.onlineStatus === 'online') {
@@ -102,10 +102,13 @@ ipcMain.on('online-status-changed', (event, status) => {
   if (status === 'offline') {
     console.log('OFFLINE')
     event.setTag
-    fs.mkdirSync((`${dir}`, 'offlineEvents'), (err, directory) => {
-      if (err) throw err;
-      // A new temporary directory is created within the app root
-    });
+    if (!fs.existsSync((`${dir}`, 'offlineEvents'))) {
+      fs.mkdirSync((`${dir}`, 'offlineEvents'), (err, directory) => {
+        if (err) throw err;
+        // A new temporary directory is created within the app root
+      });
+    }
+
     Sentry.configureScope(scope => {
       scope.setTag("onlineStatus", 'offline');
     });
