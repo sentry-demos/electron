@@ -1,104 +1,346 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <script src="../dist/main.js"></script>
+  <title>Empower Plant</title>
+</head>
+<body>
 
-    <!-- Sentry & App -->
-    <script src="https://browser.sentry-cdn.com/5.2.1/bundle.min.js" crossorigin="anonymous"></script>
-    <script src="index.js" type="text/javascript"></script>
+  <!-- ── Navigation ──────────────────────────────────────────────── -->
+  <nav id="top-nav">
+    <div class="nav-contents">
+      <a href="#" onclick="showPage('home');return false;" id="home-link">
+        <img src="../assets/empowerplant-logo.svg" alt="Empower Plant" />
+        <span>Empower Plant</span>
+      </a>
+      <div id="top-right-links">
+        <a href="#" data-page="about"    onclick="showPage('about');return false;">About</a>
+        <a href="#" data-page="products" onclick="showPage('products');renderProducts();return false;">Products</a>
+        <a href="#" data-page="cart"     onclick="showPage('cart');renderCart();return false;" id="cart-nav-label" class="sentry-unmask">Cart</a>
+        <a href="#" data-page="errors"   onclick="showPage('errors');return false;">Errors</a>
+      </div>
+    </div>
+  </nav>
 
-    <title>Hello Sentry!</title>
-  </head>
-  <body>
-    <div class="">
-      <div class="App" style="color: black">
-        <div class="App-header">
-          <img src="../assets/sentry-glyph-black.png" class="App-logo" alt="logo" />
-          <h1>Sentry.io - Sample Error Page</h1>
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: HOME
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-home" class="page page--active">
+    <section id="hero">
+      <div class="hero-content">
+        <h1>Empower your plants.</h1>
+        <p>Keep your houseplants happy.</p>
+        <a href="#" class="btn" onclick="showPage('products');renderProducts();return false;">Browse products</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: PRODUCTS
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-products" class="page">
+    <div id="body-container">
+      <ul class="products-list" id="products-list">
+        <!-- Populated by renderProducts() -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: ABOUT
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-about" class="page">
+    <div id="body-container">
+      <div class="about-page">
+        <div>
+          <div class="about-info">
+            <h1>About us</h1>
+            <p>
+              Empower Plant is an IoT company determined to keep house plants happy.
+              After reading Michael Pollan's 2013 New Yorker article ("The Intelligent Plant"),
+              the wife-and-wife founding team invested their life savings in measuring and
+              improving the emotional state of their leafy housemates. Seven years later,
+              the company's grown from its humble roots in the couples' backyard greenhouse
+              into a Series C-funded San Francisco startup and the world's most accurate plant
+              mood measurer.
+            </p>
+            <p>
+              Today, the company employs 170 people (and 852 plants) in San Francisco,
+              New York City, Denver, and Kiev.
+            </p>
+          </div>
         </div>
+        <div>
+          <ul class="employee-list" id="employee-list">
+            <!-- Populated by renderAbout() -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="center">
-          <form>
-            <div class="form-group">
-              <input id="email" type="text" type="email" class="form-control" placeholder="Enter email">
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: CART
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-cart" class="page">
+    <div id="body-container">
+      <div class="cart-container">
+        <h2>Cart</h2>
+        <div id="cart-contents">
+          <!-- Populated by renderCart() -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: CHECKOUT
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-checkout" class="page">
+    <div id="body-container">
+      <div class="checkout-container">
+        <h2>Checkout</h2>
+        <form class="checkout-form" onsubmit="submitCheckout(event)">
+
+          <h4>Contact information</h4>
+          <label for="co-email">Email</label>
+          <input id="co-email" name="email" type="email" placeholder="plant.lover@example.com" value="plant.lover@example.com" class="sentry-unmask" />
+          <div style="display:flex;align-items:center;gap:0.5rem;margin:0.5rem 0;">
+            <input id="co-subscribe" name="subscribe" type="checkbox" style="width:auto;display:inline-block;" />
+            <label for="co-subscribe" style="margin:0;">Keep me updated with new sales and products</label>
+          </div>
+
+          <h4>Shipping address</h4>
+          <label for="firstName">First Name</label>
+          <input id="firstName" name="firstName" type="text" placeholder="Jane" value="Jane" />
+          <label for="lastName">Last Name</label>
+          <input id="lastName" name="lastName" type="text" placeholder="Greenthumb" value="Greenthumb" />
+          <label for="address">Address</label>
+          <input id="address" name="address" type="text" placeholder="123 Main Street" value="123 Main Street" />
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" placeholder="San Francisco" value="San Francisco" />
+          <label for="country">Country/Region</label>
+          <input id="country" name="country" type="text" placeholder="United States of America" value="United States of America" />
+          <label for="state">State</label>
+          <input id="state" name="state" type="text" placeholder="CA" value="CA" />
+          <label for="zipCode">Zip Code</label>
+          <input id="zipCode" name="zipCode" type="text" placeholder="94122" value="94122" />
+
+          <h4>Promo Code</h4>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input id="promoCode" name="promoCode" type="text" placeholder="Enter promo code" value="SAVE20" style="flex:1;" />
+            <button type="button" onclick="applyPromoCode()" class="promo-btn">Apply</button>
+          </div>
+          <p id="promo-message"></p>
+
+          <input type="submit" class="complete-checkout-btn" value="Complete order" />
+        </form>
+        <a href="#" onclick="showPage('cart');renderCart();return false;">← Back to cart</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: ORDER COMPLETE
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-complete" class="page">
+    <div id="body-container">
+      <div class="complete-container">
+        <h1>Order confirmed!</h1>
+        <p>Thanks for your purchase. Your plants are on their way.</p>
+        <button onclick="showPage('products');renderProducts();">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PAGE: ERRORS
+  ═════════════════════════════════════════════════════════════════ -->
+  <div id="page-errors" class="page">
+    <div id="body-container">
+
+      <!-- Native Crash -->
+      <section class="section-block" id="crashes">
+        <h2 class="section-heading">Native Crash</h2>
+        <ul class="product-grid">
+          <li class="product-card" onclick="crashMain()">
+            <div class="product-card-info">
+              <p class="product-card-category">Main Process</p>
+              <h3 class="product-card-name">Monstera Deliciosa</h3>
+              <p class="product-card-description">process.crash() in the Electron main process</p>
+              <button>Trigger crash</button>
             </div>
-            <button id="submit-email" type="submit" class="btn btn-primary" onclick="return false">Submit</button>
-          </form>
-        </div>
-
-        <h2 id="guest-email">Set Your Email Above</h2>
-
-        <ul class="center list-group">
-          <li class="list-group-item list-group-item-danger">
-            <h3>NATIVE CRASH</h3>
           </li>
-          <li class="list-group-item" onclick="crashMain()">
-            <h3>Main Process</h3>
-            <p>process.crash() in the main process</p>
-          </li>
-          <li class="list-group-item" onclick="crashRenderer()">
-            <h3>Renderer Process</h3>
-            <p>crash from exception thrown within renderer process</p>
-          </li>
-          <li class="list-group-item list-group-item-danger">
-              <h3>JAVASCRIPT</h3>
-          </li>
-          <li class="list-group-item" onclick="notAFunctionError()">
-            <h3>TypeError</h3>
-            <p>"obj.attributeInvalid is not a function"</p>
-          </li>
-          <li class="list-group-item" onclick="syntaxError()">
-            <h3>SyntaxError</h3>
-            <p>"Unexpected identifier"</p>
+          <li class="product-card" onclick="crashRenderer()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer Process</p>
+              <h3 class="product-card-name">Spider Plant</h3>
+              <p class="product-card-description">Native crash from exception thrown within the renderer process</p>
+              <button>Trigger crash</button>
+            </div>
           </li>
         </ul>
-        <footer class="footer">
-          Node.js
-          <script>document.write(versions.node)</script>
-          <br> Chromium
-          <script>document.write(versions.chrome)</script>
-          <br> Electron
-          <script>document.write(versions.electron)</script>
-          <br>
-        </footer>
-      </div>
+      </section>
 
+      <!-- JS Errors — Renderer -->
+      <section class="section-block">
+        <h2 class="section-heading">JavaScript Errors — Renderer</h2>
+        <ul class="product-grid">
+          <li class="product-card" onclick="notAFunctionError()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · TypeError</p>
+              <h3 class="product-card-name">Fiddle-Leaf Fig</h3>
+              <p class="product-card-description">"obj.attributeInvalid is not a function"</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="referenceError()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · ReferenceError</p>
+              <h3 class="product-card-name">Philodendron</h3>
+              <p class="product-card-description">"undefinedVariable is not defined"</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="rangeError()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · RangeError</p>
+              <h3 class="product-card-name">Chinese Evergreen</h3>
+              <p class="product-card-description">"Parameter must be between 1 and 100"</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="syntaxError()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · SyntaxError</p>
+              <h3 class="product-card-name">Snake Plant</h3>
+              <p class="product-card-description">"Unexpected identifier" via eval()</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="errorRenderer()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · Unhandled</p>
+              <h3 class="product-card-name">Peace Lily</h3>
+              <p class="product-card-description">Generic unhandled error thrown in the renderer process</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="addToCartJsError()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · TypeError</p>
+              <h3 class="product-card-name">Aloe Vera</h3>
+              <p class="product-card-description">"Cannot read properties of undefined" — inventory check fails on add to cart</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- JS Errors — Main Process -->
+      <section class="section-block">
+        <h2 class="section-heading">JavaScript Errors — Main Process</h2>
+        <ul class="product-grid">
+          <li class="product-card" onclick="errorMain()">
+            <div class="product-card-info">
+              <p class="product-card-category">Main Process · Unhandled</p>
+              <h3 class="product-card-name">Bird of Paradise</h3>
+              <p class="product-card-description">Unhandled error thrown in the Electron main process via IPC</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="referenceErrorMain()">
+            <div class="product-card-info">
+              <p class="product-card-category">Main Process · ReferenceError</p>
+              <h3 class="product-card-name">Pothos</h3>
+              <p class="product-card-description">ReferenceError thrown in the main process via IPC</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="rangeErrorMain()">
+            <div class="product-card-info">
+              <p class="product-card-category">Main Process · RangeError</p>
+              <h3 class="product-card-name">ZZ Plant</h3>
+              <p class="product-card-description">RangeError thrown in the main process via IPC</p>
+              <button>Trigger error</button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Performance -->
+      <section class="section-block">
+        <h2 class="section-heading">Performance</h2>
+        <ul class="product-grid">
+          <li class="product-card" onclick="slowOperation()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · Custom Span</p>
+              <h3 class="product-card-name">Bonsai Tree</h3>
+              <p class="product-card-description">Wraps a 200ms busy-wait in a Sentry performance span</p>
+              <button>Run span</button>
+            </div>
+          </li>
+          <li class="product-card" onclick="nPlusOneRequests()">
+            <div class="product-card-info">
+              <p class="product-card-category">Renderer · N+1</p>
+              <h3 class="product-card-name">Ivy Vine</h3>
+              <p class="product-card-description">Fires 20 fetches inside a single parent transaction span</p>
+              <button>Run N+1</button>
+            </div>
+          </li>
+        </ul>
+      </section>
 
     </div>
+  </div>
 
-    <script>
-      $(document).ready(function(){
-        $("#submit-email").click(function(event){
-          var email = $("#email").val()
-          document.querySelector('#guest-email').innerHTML = `Hi ${email}`
+  <!-- ── Shared footer (always visible) ───────────────────────────── -->
+  <footer id="footer">
+    <div>
+      <h2 class="h3">Sign up for plant tech news</h2>
+      <div class="footer-form-container">
+        <form onsubmit="subscribeNewsletter(event)">
+          <label for="footer-email">Email</label>
+          <input type="email" id="footer-email" placeholder="plant.lover@example.com" />
+          <button type="submit" class="subscribe-button">Subscribe</button>
+        </form>
+        <p id="subscribe-message"></p>
+      </div>
+      <p class="footer-copy">© 2026 • Empower Plant •
+        <a href="#" onclick="showPage('about');return false;">About us</a>
+      </p>
+    </div>
+  </footer>
 
-          Sentry.configureScope(scope => {
-            scope.setUser({ email: email });
-          });
-        });
-      });
-    </script>
-    <script>
-      const alertOnlineStatus = () => {
-        window.alert(navigator.onLine ? 'online' : 'offline')
-      }
+  <!-- ── AI Chat Widget ───────────────────────────────────────── -->
+  <div class="chat-widget-container">
+    <div id="chat-window" class="chat-window" style="display:none;">
+      <div class="chat-header">
+        <div class="chat-header-content">
+          <img src="../assets/empower-agent.png" alt="AI Agent" class="chat-header-icon" />
+          <span class="chat-header-title">AI Agent</span>
+        </div>
+        <button class="chat-close-button" onclick="closeChat('click_close_button')">×</button>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <form class="chat-input-form" id="chat-input-form" onsubmit="sendChatMessage(event)" style="display:none;">
+        <input id="chat-message-input" type="text" placeholder="Type your answer..."
+               class="chat-input" oninput="chatInputChanged(event)" onfocus="chatInputFocused()" />
+        <button id="chat-send-button" type="submit" class="chat-send-button">Send</button>
+      </form>
+    </div>
+    <button id="chat-widget-button" class="chat-toggle-button" onclick="toggleChat()">
+      <img src="../assets/empower-agent.png" alt="Chat with AI Agent" />
+    </button>
+  </div>
 
-      window.addEventListener('online',  alertOnlineStatus)
-      window.addEventListener('offline',  alertOnlineStatus)
+  <!-- ── Boot scripts ───────────────────────────────────────────── -->
+  <script>
+    renderProducts();
+    renderAbout();
+  </script>
 
-      alertOnlineStatus()
-      const updateOnlineStatus = () => {
-        ipcRenderer.send('online-status-changed', navigator.onLine ? 'online' : 'offline')
-      }
-
-      window.addEventListener('online',  updateOnlineStatus)
-      window.addEventListener('offline',  updateOnlineStatus)
-
-      updateOnlineStatus()
-    </script>
-
-  </body>
+</body>
 </html>
