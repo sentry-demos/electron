@@ -1,35 +1,31 @@
 {
-  "name": "electron-quick-start",
+  "name": "empower-plant-electron",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Empower Plant — Electron demo app for Sentry error monitoring, performance, logging, metrics, and session replay",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "webpack -p"
+    "build": "webpack --mode production"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/sentry-demos/electron",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Sentry",
+    "demo",
+    "empower-plant"
   ],
-  "author": "GitHub",
+  "author": "Sentry",
   "license": "CC0-1.0",
   "devDependencies": {
-    "@sentry/webpack-plugin": "^1.18.8",
-    "electron": "^4.1.4",
-    "electron-download": "^4.1.1",
-    "eslint": "^8.11.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@sentry/webpack-plugin": "^2.22.7",
+    "electron": "^42.3.3",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
   },
   "dependencies": {
-    "@sentry/cli": "^1.73.2",
-    "@sentry/electron": "^3.0.4",
-    "@sentry/tracing": "^6.18.2",
-    "axios": "^0.19.2",
-    "jquery": "^3.4.1"
+    "@sentry/cli": "^3.5.0",
+    "@sentry/electron": "^7.13.0",
+    "axios": "^1.17.0",
+    "dotenv": "^17.4.2"
   }
 }

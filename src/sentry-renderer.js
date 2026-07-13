@@ -1,16 +1,29 @@
-const Sentry = require('@sentry/electron/main');
-const fs = require('fs');
+const Sentry = require('@sentry/electron/renderer');
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   release: process.env.SENTRY_RELEASE,
   environment: process.env.SENTRY_ENVIRONMENT,
   tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0,
+  replaysSessionSampleRate: 1.0,
+  replaysOnErrorSampleRate: 1.0,
+  propagateTraceparent: true,
+  tracePropagationTargets: ['localhost', /empower-plant\.com/, /\.run\.app$/],
   debug: true,
   enableLogs: true,
 
   integrations: [
+    Sentry.browserTracingIntegration(),
     Sentry.consoleLoggingIntegration({ levels: ['log', 'warn', 'error'] }),
+    Sentry.feedbackIntegration({ colorScheme: 'system' }),
+    Sentry.replayIntegration({
+      blockAllMedia: false,
+      networkDetailAllowUrls: [/.*/],
+      unmask: ['.sentry-unmask'],
+    }),
+    Sentry.browserProfilingIntegration(),
+    Sentry.elementTimingIntegration(),
   ],
 
   beforeSendLog: (log) => {
@@ -22,28 +35,13 @@ Sentry.init({
   },
 
   beforeSend(event) {
-    const tags = event.tags || {};
-
-    // Persist event to disk when offline; replayed on reconnect
-    if (tags.onlineStatus === 'offline') {
-      console.log('OFFLINE');
-      const sentryEvent = event;
-      console.log(sentryEvent.event_id);
-      fs.writeFileSync(
-        './offlineEvents/' + sentryEvent.event_id + '.json',
-        JSON.stringify(sentryEvent),
-        (err) => { if (err) throw err; }
-      );
-    }
-
-    // Custom fingerprinting: group by error type
     if (event.exception) {
       const errorType = event.exception.values?.[0]?.type;
       if (errorType) {
         event.fingerprint = ['{{ default }}', errorType];
       }
+      sessionStorage.setItem('lastErrorEventId', event.event_id);
     }
-
     return event;
   },
 });

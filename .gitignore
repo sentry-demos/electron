@@ -1,2 +1,20 @@
-node_modules/*
-.electron-symbols/*
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.electron-symbols/
+
+# Secrets — never commit these
+.env
+.env.local
+.env.*.local
+sentry.properties
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
